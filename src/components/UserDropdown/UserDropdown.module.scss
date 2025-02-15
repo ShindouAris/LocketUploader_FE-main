@@ -1,0 +1,39 @@
+.logout-btn {
+    display: flex;
+    align-items: center;
+    background-color: #90ee90;
+    border-radius: 999px;
+    padding: 5px 15px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+
+    .kanadeimage {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid white;
+        margin-right: 10px;
+    }
+
+    .logout-txt {
+        color: red;
+        font-size: 18px;
+        font-weight: bold;
+    }
+}
+
+
+@media screen and (max-width: 400px) {
+    .wrapper {
+        flex-direction: column;
+        gap: 0;
+        background-color: #f6d6d6;
+    }
+}
