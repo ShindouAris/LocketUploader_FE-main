@@ -232,6 +232,7 @@ const Upload = () => {
                             onHide={() => setIsShowModal(false)}
                             onPleaseWait={showToastPleaseWait}
                         />
+                        <img className={cx("pls_login_image")} src={images.pls_login} alt="pls_login_img" />
                     </div>
                 )}
             </div>

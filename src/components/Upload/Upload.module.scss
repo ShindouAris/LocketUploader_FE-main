@@ -39,7 +39,7 @@ input[type="file"] {
 
     .post-title {
         padding: 10px 0;
-        font-size: 2rem;
+        font-size: 1.5rem;
         caret-color: var(--primary-color);
         width: 100%;
     }
@@ -144,6 +144,7 @@ input[type="file"] {
 
     .btn-submit {
         position: relative;
+        background: #8174A0;
     }
 
     .btn-submit:not(:disabled) {
@@ -185,6 +186,10 @@ input[type="file"] {
     .btn-login:hover {
         opacity: 0.8;
     }
+    .pls_login_image {
+        height: 190px;
+        width: 150px;
+    }
 }
 
 // Responsive
@@ -193,7 +198,7 @@ input[type="file"] {
     .card {
         width: 90%;
         min-height: 60%;
-        padding: 20px;
+        padding: 10px;
 
         .input-container {
             margin: 5px 0 8px 0;

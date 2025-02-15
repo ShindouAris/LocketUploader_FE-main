@@ -4,7 +4,8 @@ const images = {
     spinner: require("./spinner.gif"),
     eye: require("./eye.png"),
     noEye: require("./eye-slash.png"),
-    logout_alt: require("./kanade_image.jpg")
+    logout_alt: require("./kanade_image.jpg"),
+    pls_login: require("./pls_login.jpg"),
 };
 
 export default images;

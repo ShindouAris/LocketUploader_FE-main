@@ -21,7 +21,7 @@ const LoginModal = ({ handleAfterLogin, onPleaseWait, ...props }) => {
 
     const handleLogin = async () => {
         toast.dismiss();
-        const toastId = toast.info("Đang đăng nhập", {
+        const toastId = toast.info("Logging in ....", {
             ...constants.toastSettings,
         });
 
@@ -41,12 +41,12 @@ const LoginModal = ({ handleAfterLogin, onPleaseWait, ...props }) => {
         } else if (toast.isActive(toastId)) {
             toast.update(toastId, {
                 ...constants.toastSettings,
-                render: "Email hoặc mật khẩu không chính xác",
+                render: "Username or password is incorrect",
                 type: "error",
             });
         } else {
             toast.dismiss();
-            toast.error("Email hoặc mật khẩu không chính xác", {
+            toast.error("Username or password is incorrect", {
                 ...constants.toastSettings,
             });
         }
@@ -62,7 +62,7 @@ const LoginModal = ({ handleAfterLogin, onPleaseWait, ...props }) => {
     const handleChangeEmail = (e) => {
         setEmail(e.target.value);
         if (e.target.value && !validateEmail(e.target.value)) {
-            setEmailErrorMessage("Email không chính xác");
+            setEmailErrorMessage("Invalid email");
             setIsDisabledSubmit(true);
         } else {
             setEmailErrorMessage("");
@@ -94,7 +94,7 @@ const LoginModal = ({ handleAfterLogin, onPleaseWait, ...props }) => {
                         <Form.Control
                             className={"bs-input"}
                             type="text"
-                            placeholder="Email"
+                            placeholder="Enter email"
                             value={email}
                             onChange={handleChangeEmail}
                             autoComplete="none"
@@ -109,7 +109,7 @@ const LoginModal = ({ handleAfterLogin, onPleaseWait, ...props }) => {
                         <div className="password-wrapper">
                             <Form.Control
                                 type={isShowPassword ? "text" : "password"}
-                                placeholder="Mật Khẩu"
+                                placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 autoComplete="new-password"
@@ -153,6 +153,7 @@ const LoginModal = ({ handleAfterLogin, onPleaseWait, ...props }) => {
                 </Button>
             </Modal.Footer>
         </Modal>
+
     );
 };
 
