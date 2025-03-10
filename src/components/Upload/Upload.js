@@ -12,6 +12,53 @@ import * as lockerService from "~/services/locketService";
 import Help from "../Modals/Login/Help";
 const cx = classNames.bind(styles);
 
+// ChatGPT !!
+const autoCropImage = async (imageFile) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+
+            img.onload = () => {
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+
+                const size = Math.min(img.width, img.height);
+                canvas.width = size;
+                canvas.height = size;
+
+                ctx.drawImage(
+                    img,
+                    (img.width - size) / 2,
+                    (img.height - size) / 2,
+                    size,
+                    size,
+                    0,
+                    0,
+                    size,
+                    size
+                );
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(new File([blob], imageFile.name, { type: "image/jpeg" }));
+                    } else {
+                        reject(new Error("Image cropping failed"));
+                    }
+                }, "image/jpeg");
+            };
+
+            img.onerror = () => reject(new Error("Failed to load image"));
+        };
+
+        reader.onerror = () => reject(new Error("Failed to read file"));
+        reader.readAsDataURL(imageFile);
+    });
+};
+
+
 const Upload = () => {
     const { user, setUser } = useContext(AuthContext);
 
@@ -46,11 +93,17 @@ const Upload = () => {
         fileRef.current.click();
     };
 
-    const handleSelectFile = (e) => {
+    const handleSelectFile = async (e) => {
         const { files } = e.target;
         if (files?.length) {
-            const objectUrl = URL.createObjectURL(files[0]);
-            setFile(files[0]);
+            let selectedFile = files[0];
+
+            if (selectedFile.type.startsWith("image/")) {
+                selectedFile = await autoCropImage(selectedFile);
+            }
+
+            const objectUrl = URL.createObjectURL(selectedFile);
+            setFile(selectedFile);
             setPreviewUrl(objectUrl);
         }
     };
@@ -129,7 +182,7 @@ const Upload = () => {
                             <input
                                 type="text"
                                 className={cx("post-title")}
-                                placeholder="Nhập caption"
+                                placeholder="Nhập caption :>"
                                 value={caption}
                                 onChange={(e) => setCaption(e.target.value)}
                             />
