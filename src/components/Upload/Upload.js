@@ -71,7 +71,7 @@ const Upload = () => {
     };
 
     const handleUploadFile = () => {
-        const fileType = file.type.includes("image") ? "image" : "video";
+        const fileType = file.type.includes("image") ? "ảnh" : "video";
         if (file) {
             setIsUploading(true);
             lockerService
@@ -93,7 +93,13 @@ const Upload = () => {
                         "Tải lên thất bại";
 
                     if (message === "Failed to upload image: Forbidden") {
-                        message = `Your ${fileType} is exceeding the maximum size allowed, please try again with a smaller ${fileType}`;
+                        if (fileType === "video") {
+                            message = `${fileType} của bạn đã dài quá 3s hoặc nặng quá 5mb, hãy nén / cắt và thử lại :>`
+                        }
+                        else {
+                            message = `${fileType} của bạn đã vượt quá giới hạn tải lên, hãy nén nó xuống dưới 1mb nhé :>`;
+                        }
+
                     }
                     setIsUploading(false);
                     toast.error(message, {
@@ -106,7 +112,7 @@ const Upload = () => {
     const showToastPleaseWait = () => {
         toast.dismiss();
         toast.info(
-            "I just migrated the server to Render at the free version, so the request may take a longer time. Please wait for it. ",
+            "Đợi chút, đang kết nối đến máy chủ để xử lý. ",
             {
                 ...constants.toastSettings,
             },

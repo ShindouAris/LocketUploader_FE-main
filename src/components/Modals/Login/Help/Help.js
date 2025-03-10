@@ -12,10 +12,10 @@ const Help = () => (
                 <div className={cx("wrapper")} tabIndex="-1" {...attrs}>
                     <p className={cx("content")}>
                         Currently, my website serves images less than{" "}
-                        <b> 1MB </b> and videos less than <b>10 MB</b> and and
+                        <b> 1MB </b> and videos less than <b>5 MB</b> and and
                         doesn't exceed {""}
                         <b>
-                            1&nbsp;minute.
+                            3&nbsp;second.
                             <br />
                         </b>{" "}
                         Show you can access{" "}
