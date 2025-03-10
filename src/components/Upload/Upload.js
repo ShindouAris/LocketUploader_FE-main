@@ -113,12 +113,18 @@ const Upload = () => {
         e.preventDefault();
     };
 
-    const handleSelectFileFromDrop = (e) => {
+    const handleSelectFileFromDrop = async (e) => {
         e.preventDefault();
         const { files } = e.dataTransfer;
         if (files?.length) {
-            const objectUrl = URL.createObjectURL(files[0]);
-            setFile(files[0]);
+            let selectedFile = files[0];
+
+            if (selectedFile.type.startsWith("image/")) {
+                selectedFile = await autoCropImage(selectedFile);
+            }
+
+            const objectUrl = URL.createObjectURL(selectedFile);
+            setFile(selectedFile);
             setPreviewUrl(objectUrl);
         }
     };
