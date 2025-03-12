@@ -10,6 +10,7 @@ import LoginModal from "../Modals/Login/LoginModal";
 import * as miscFuncs from "~/helper/misc-functions";
 import * as lockerService from "~/services/locketService";
 import Help from "../Modals/Login/Help";
+import VideoCroppingutils from "~/utils/videoUtils";
 const cx = classNames.bind(styles);
 
 // ChatGPT !!
@@ -69,6 +70,8 @@ const Upload = () => {
     const [isUploading, setIsUploading] = useState(false);
     const fileRef = useRef(null);
 
+    const [enable_cropping, setIsEnableCropping] = useState(false);
+
     useEffect(() => {
         return () => {
             if (previewUrl) {
@@ -93,19 +96,33 @@ const Upload = () => {
         fileRef.current.click();
     };
 
-    const handleSelectFile = async (e) => {
-        const { files } = e.target;
+    const fileHandler = async (files) => {
         if (files?.length) {
             let selectedFile = files[0];
 
-            if (selectedFile.type.startsWith("image/")) {
+            if (selectedFile.type.includes("image")) {
                 selectedFile = await autoCropImage(selectedFile);
+                if (enable_cropping) {
+                    toast.warning("Vô hiệu hóa CropVideo vì bạn đã chọn ảnh...", {...constants.toastSettings})
+                    setIsEnableCropping(false)
+                }
+            }
+            else {
+                if (enable_cropping) {
+                    toast.info("Chờ chút, đang xử lý video...", {...constants.toastSettings})
+                    selectedFile = await VideoCroppingutils(selectedFile);
+                }
             }
 
             const objectUrl = URL.createObjectURL(selectedFile);
             setFile(selectedFile);
             setPreviewUrl(objectUrl);
         }
+    }
+
+    const handleSelectFile = async (e) => {
+        const { files } = e.target;
+        await fileHandler(files)
     };
 
     const handleDragOver = (e) => {
@@ -116,17 +133,7 @@ const Upload = () => {
     const handleSelectFileFromDrop = async (e) => {
         e.preventDefault();
         const { files } = e.dataTransfer;
-        if (files?.length) {
-            let selectedFile = files[0];
-
-            if (selectedFile.type.startsWith("image/")) {
-                selectedFile = await autoCropImage(selectedFile);
-            }
-
-            const objectUrl = URL.createObjectURL(selectedFile);
-            setFile(selectedFile);
-            setPreviewUrl(objectUrl);
-        }
+        await fileHandler(files)
     };
 
     const handleUploadFile = () => {
@@ -192,6 +199,16 @@ const Upload = () => {
                                 value={caption}
                                 onChange={(e) => setCaption(e.target.value)}
                             />
+                        </div>
+                        <div className={cx("croptitle")} >🛠️ CropVideo (Đang thử nghiệm)</div>
+                        <div className={cx("enable_cropping_video_btn")} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <button onClick={() => setIsEnableCropping(!enable_cropping)} className={`${styles.button} ${enable_cropping ? styles.active : styles.inactive}`} disabled={previewUrl? "disabled" : ""}>
+                                {enable_cropping? "✅" : "❌"}
+                            </button>
+                            <span className={`${styles.warn_text}`}>
+                                {previewUrl? "Tính năng không khả dụng" : `${enable_cropping ? "⚠️ Đang bật crop video, Upload không khả dụng" : ""}`}
+
+                            </span>
                         </div>
                         <div
                             className={cx("upload-area")}
@@ -261,7 +278,7 @@ const Upload = () => {
                             <div className={cx("buttons")}>
                                 <button
                                     disabled={
-                                        previewUrl && caption && !isUploading
+                                        previewUrl && caption && !isUploading && !enable_cropping
                                             ? ""
                                             : "disable"
                                     }

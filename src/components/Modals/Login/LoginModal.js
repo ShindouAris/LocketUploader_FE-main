@@ -93,7 +93,7 @@ const LoginModal = ({ handleAfterLogin, onPleaseWait, ...props }) => {
                         </Form.Label>
                         <Form.Control
                             className={"bs-input"}
-                            type="text"
+                            type="email"
                             placeholder="Enter email"
                             value={email}
                             onChange={handleChangeEmail}
