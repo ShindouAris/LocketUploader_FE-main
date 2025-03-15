@@ -100,29 +100,54 @@ const Upload = () => {
         if (files?.length) {
             let selectedFile = files[0];
 
-            if (selectedFile.type.includes("image")) {
-                selectedFile = await autoCropImage(selectedFile);
-                if (enable_cropping) {
-                    toast.warning("Vô hiệu hóa CropVideo vì bạn đã chọn ảnh...", {...constants.toastSettings})
-                    setIsEnableCropping(false)
-                }
-            }
-            else {
-                if (enable_cropping) {
-                    toast.info("Chờ chút, đang xử lý video...", {...constants.toastSettings})
-                    selectedFile = await VideoCroppingutils(selectedFile);
-                }
-                if (!selectedFile.type.includes("video")) {
-                    toast.error("File không hợp lệ", {...constants.toastSettings})
-                    return;
-                }
+            if (selectedFile.size > 5 * 1024 * 1024) {
+                toast.error("File quá lớn (tối đa 5MB)", {...constants.toastSettings});
+                return;
             }
 
-            const objectUrl = URL.createObjectURL(selectedFile);
-            setFile(selectedFile);
-            setPreviewUrl(objectUrl);
+            if (selectedFile.type.includes("video")) {
+                const videoElement = document.createElement("video");
+                videoElement.preload = "metadata";
+
+                videoElement.onloadedmetadata = async () => {
+                    window.URL.revokeObjectURL(videoElement.src);
+
+                    if (videoElement.duration > 3) {
+                        toast.error("Video quá dài (tối đa 3 giây)", {...constants.toastSettings});
+                        return;
+                    }
+
+                    if (enable_cropping) {
+                        toast.info("Chờ chút, đang xử lý video...", {...constants.toastSettings});
+                        selectedFile = await VideoCroppingutils(selectedFile);
+                    }
+
+                    if (!selectedFile.type.includes("video")) {
+                        toast.error("File không hợp lệ", {...constants.toastSettings});
+                        return;
+                    }
+
+                    const objectUrl = URL.createObjectURL(selectedFile);
+                    setFile(selectedFile);
+                    setPreviewUrl(objectUrl);
+                };
+
+                videoElement.src = URL.createObjectURL(selectedFile);
+            } else if (selectedFile.type.includes("image")) {
+                selectedFile = await autoCropImage(selectedFile);
+                if (enable_cropping) {
+                    toast.warning("Vô hiệu hóa CropVideo vì bạn đã chọn ảnh...", {...constants.toastSettings});
+                    setIsEnableCropping(false);
+                }
+
+                const objectUrl = URL.createObjectURL(selectedFile);
+                setFile(selectedFile);
+                setPreviewUrl(objectUrl);
+            } else {
+                toast.error("File không hợp lệ", {...constants.toastSettings});
+            }
         }
-    }
+    };
 
     const handlePaste = async (e) => {
         e.preventDefault();
@@ -236,7 +261,7 @@ const Upload = () => {
                                 {enable_cropping? "✅" : "❌"}
                             </button>
                             <span className={`${styles.warn_text}`}>
-                                {previewUrl? "Tính năng không khả dụng" : `${enable_cropping ? "⚠️ Đang bật crop video, Upload không khả dụng" : ""}`}
+                                {previewUrl? "Vô hiệu hóa vì đã đưa media lên rồi" : `${enable_cropping ? "⚠️ Đang bật crop video" : ""}`}
 
                             </span>
                         </div>
@@ -309,7 +334,7 @@ const Upload = () => {
                             <div className={cx("buttons")}>
                                 <button
                                     disabled={
-                                        previewUrl && caption && !isUploading && !enable_cropping
+                                        previewUrl && caption && !isUploading
                                             ? ""
                                             : "disable"
                                     }
