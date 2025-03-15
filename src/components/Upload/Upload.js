@@ -112,6 +112,10 @@ const Upload = () => {
                     toast.info("Chờ chút, đang xử lý video...", {...constants.toastSettings})
                     selectedFile = await VideoCroppingutils(selectedFile);
                 }
+                if (!selectedFile.type.includes("video")) {
+                    toast.error("File không hợp lệ", {...constants.toastSettings})
+                    return;
+                }
             }
 
             const objectUrl = URL.createObjectURL(selectedFile);
@@ -119,6 +123,32 @@ const Upload = () => {
             setPreviewUrl(objectUrl);
         }
     }
+
+    const handlePaste = async (e) => {
+        e.preventDefault();
+
+        if (!e.clipboardData || !e.clipboardData.items) {
+            toast.error("Không tìm thấy dữ liệu từ clipboard.", { ...constants.toastSettings });
+            return;
+        }
+
+        const items = e.clipboardData.items;
+        let fetched = false;
+
+        for (let item of items) {
+            if (item.kind === "file" && item.type.startsWith("image/")) {
+                fetched = true;
+                const file = item.getAsFile();
+                await fileHandler([file]);
+                return;
+            }
+        }
+
+        if (!fetched) {
+            toast.warning("Dữ liệu dán không phải là hình ảnh!", { ...constants.toastSettings });
+        }
+    };
+
 
     const handleSelectFile = async (e) => {
         const { files } = e.target;
@@ -186,7 +216,7 @@ const Upload = () => {
     };
 
     return (
-        <div className={cx("wrapper")}>
+        <div className={cx("wrapper")} onPaste={handlePaste}>
             <div className={cx("card")}>
                 {user ? (
                     <>
@@ -214,6 +244,7 @@ const Upload = () => {
                             className={cx("upload-area")}
                             onDragOver={handleDragOver}
                             onDrop={handleSelectFileFromDrop}
+                            onPaste={handlePaste}
                             role="button"
                             tabIndex="0"
                         >
@@ -256,12 +287,12 @@ const Upload = () => {
                                         />
                                     </button>
                                     <h3>
-                                        Drag and Drop file here or{" "}
+                                        Kéo thả tệp, Dán tệp hoặc{" "}
                                         <button
                                             className={cx("underline")}
                                             onClick={handleTriggerUploadFile}
                                         >
-                                            Choose file
+                                            Chọn tệp
                                         </button>
                                         <input
                                             type="file"
