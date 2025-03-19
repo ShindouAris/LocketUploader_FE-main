@@ -101,6 +101,18 @@ input[type="file"] {
         font-weight: inherit;
     }
 }
+.option-container {
+    display: inline-block;
+    border: 1px  #ccc;
+    border-radius: 8px;
+    background-color: #F6F7C4;
+    padding: 8px;
+    padding-bottom: 3px;
+    width: max-content;
+    min-width: fit-content;
+    margin-bottom: 3px;
+    transition: all 0.3s ease-in-out;
+}
 
 .upload-area {
     .content {

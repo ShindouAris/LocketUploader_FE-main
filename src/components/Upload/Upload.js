@@ -11,6 +11,8 @@ import * as miscFuncs from "~/helper/misc-functions";
 import * as lockerService from "~/services/locketService";
 import Help from "../Modals/Login/Help";
 import VideoCroppingutils from "~/utils/videoUtils";
+import CompressorImage from "~/utils/imageUtils";
+
 const cx = classNames.bind(styles);
 
 // ChatGPT !!
@@ -71,6 +73,7 @@ const Upload = () => {
     const fileRef = useRef(null);
 
     const [enable_cropping, setIsEnableCropping] = useState(false);
+    const [cropImage, setCropImage] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -100,12 +103,11 @@ const Upload = () => {
         if (files?.length) {
             let selectedFile = files[0];
 
-            if (selectedFile.size > 5 * 1024 * 1024) {
-                toast.error("File quá lớn (tối đa 5MB)", {...constants.toastSettings});
-                return;
-            }
-
             if (selectedFile.type.includes("video")) {
+                if (selectedFile.size > 5 * 1024 * 1024) {
+                    toast.error("File quá lớn (tối đa 5MB)", {...constants.toastSettings});
+                    return;
+                }
                 const videoElement = document.createElement("video");
                 videoElement.preload = "metadata";
 
@@ -134,16 +136,38 @@ const Upload = () => {
 
                 videoElement.src = URL.createObjectURL(selectedFile);
             } else if (selectedFile.type.includes("image")) {
-                selectedFile = await autoCropImage(selectedFile);
+
+                if ((selectedFile.size > 5 * 1024 * 1024) && !cropImage) {
+                    toast.error("File quá lớn (tối đa 1MB)", {...constants.toastSettings});
+                    return;
+                }
                 if (enable_cropping) {
                     toast.warning("Vô hiệu hóa CropVideo vì bạn đã chọn ảnh...", {...constants.toastSettings});
                     setIsEnableCropping(false);
                 }
+                if (cropImage) {
+                    toast.info("Đang nén ảnh..", {...constants.toastSettings});
+                    try {
+                        let imagecropping = await CompressorImage(selectedFile);
+                        if (!(imagecropping instanceof Blob)) {
+                            toast.error(`Đã xảy ra lỗi...`, {...constants.toastSettings});
+                        }
+                    }
+                    catch (error) {
+                        toast.error(error.message);
+                        console.log(error.message);
+                    }
+                }
 
+                selectedFile = await autoCropImage(selectedFile);
                 const objectUrl = URL.createObjectURL(selectedFile);
                 setFile(selectedFile);
                 setPreviewUrl(objectUrl);
             } else {
+                if (selectedFile.size > 5 * 1024 * 1024) {
+                    toast.error("File quá lớn (tối đa 5MB)", {...constants.toastSettings});
+                    return;
+                }
                 toast.error("File không hợp lệ", {...constants.toastSettings});
             }
         }
@@ -255,15 +279,25 @@ const Upload = () => {
                                 onChange={(e) => setCaption(e.target.value)}
                             />
                         </div>
+                        <div className={cx("option-container")}>
                         <div className={cx("croptitle")} >🛠️ CropVideo (Đang thử nghiệm)</div>
                         <div className={cx("enable_cropping_video_btn")} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                            <button onClick={() => setIsEnableCropping(!enable_cropping)} className={`${styles.button} ${enable_cropping ? styles.active : styles.inactive}`} disabled={previewUrl? "disabled" : ""}>
+                            <button onClick={() => setIsEnableCropping(!enable_cropping)} className={`${styles.button} ${enable_cropping ? styles.active : styles.inactive}`} disabled={previewUrl || cropImage? "disabled" : ""}>
                                 {enable_cropping? "✅" : "❌"}
                             </button>
                             <span className={`${styles.warn_text}`}>
-                                {previewUrl? "Vô hiệu hóa vì đã đưa media lên rồi" : `${enable_cropping ? "⚠️ Đang bật crop video" : ""}`}
-
+                                {previewUrl? "Khóa vì đã đưa media lên rồi" : `${enable_cropping ? "⚠️ Đang bật crop video" : `${cropImage ? "Đang bật nén ảnh, không khả dụng" : ""}`}`}
                             </span>
+                        </div>
+                        <div className={cx("croptitle")} >🛠️ Nén ảnh (Đang thử nghiệm)</div>
+                        <div className={cx("image_compress_btn")} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <button onClick={() => setCropImage(!cropImage)} className={`${styles.button} ${cropImage ? styles.active : styles.inactive}`} disabled={previewUrl || enable_cropping ? "disabled" : ""}>
+                                {cropImage? "✅" : "❌"}
+                            </button>
+                            <span className={`${styles.warn_text}`}>
+                                {previewUrl? "Khóa vì đã đưa media lên rồi" : `${cropImage ? "⚠️ Đang bật nén ảnh" : `${enable_cropping ? "Đang bật crop video, không khả dụng" : ""}`}`}
+                            </span>
+                        </div>
                         </div>
                         <div
                             className={cx("upload-area")}
