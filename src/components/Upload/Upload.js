@@ -368,7 +368,7 @@ const Upload = () => {
                             <div className={cx("buttons")}>
                                 <button
                                     disabled={
-                                        previewUrl && caption && !isUploading
+                                        previewUrl && !isUploading
                                             ? ""
                                             : "disable"
                                     }
