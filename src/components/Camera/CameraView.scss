@@ -137,6 +137,17 @@
             background-image: linear-gradient(to right, #9333ea, #db2777);
         }
     }
+    .backtoupload {
+        background-color: #7BD3EA;
+        padding: 1.5rem;
+        border-radius: 9999px;
+
+        &:hover {
+            padding: 1.8rem;
+            transition: ease-in-out 0.2s;
+            background-image: linear-gradient(to top, #7BD3EA, #827bea);
+        }
+    }
 
     .start_stream {
         position: absolute;

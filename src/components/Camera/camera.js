@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Camera, Download, SwitchCamera, Aperture, CircleSlash, Send } from 'lucide-react';
+import { Camera, Download, SwitchCamera, Aperture, CircleSlash, Send, FolderOpen } from 'lucide-react';
 import styles from "./CameraView.scss";
 import classNames from "classnames/bind";
 import * as lockerService from "~/services/locketService";
@@ -10,6 +10,7 @@ import { AuthContext } from "~/contexts/AuthContext";
 import * as miscFuncs from "~/helper/misc-functions";
 import LoginModal from "~/components/Modals/Login/LoginModal";
 import images from "~/assets/images";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +19,7 @@ const CameraView = () => {
     const { user, setUser } = useContext(AuthContext);
     const [isShowModal, setIsShowModal] = useState(false);
 
+    const navigate = useNavigate();
     const videoRef = useRef(null);
     const [stream, setStream] = useState(null);
     const [capturedImage, setCapturedImage] = useState(null);
@@ -201,6 +203,10 @@ const CameraView = () => {
         miscFuncs.setCookie("user", JSON.stringify(userInfo.user), 1);
     };
 
+    const back_to_upload = () => {
+        navigate("/");
+    }
+
     return (
 
         <div className={cx("camera")}>
@@ -281,6 +287,9 @@ const CameraView = () => {
                                 </div>
                             </div>
                         )}
+                        <button className={cx("backtoupload")} onClick={back_to_upload}>
+                                <FolderOpen size={30} />
+                        </button>
                     </div>
                 </div>
 

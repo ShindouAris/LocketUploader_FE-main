@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import styles from "./Upload.module.scss";
 import classNames from "classnames/bind";
 import { toast } from "react-toastify";
+import { Camera } from "lucide-react";
 
 import { AuthContext } from "~/contexts/AuthContext";
 import constants from "~/services/constants";
@@ -308,9 +309,9 @@ const Upload = () => {
                         </div>
                         </div>
                         <div className={cx("toggle-camera")}>
-                        <div className={cx("use-camera-title")}>📷 Sử dụng máy ảnh  </div>
+                        <div className={cx("use-camera-title")}>📷 Sử dụng Camera</div>
                             <button className={cx("toggle-camera-btn")} onClick={toggleUseCamera}>
-                                Sử dụng camera
+                                <Camera size={30}/>
                             </button>
                         </div>
                         </div>
