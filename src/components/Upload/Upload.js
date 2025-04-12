@@ -72,6 +72,7 @@ const Upload = () => {
     const [previewUrl, setPreviewUrl] = useState("");
     const [isShowModal, setIsShowModal] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [uploadSuccess, setUploadSuccess] = useState(false);
     const fileRef = useRef(null);
     // const [isUseCamera, setIsUseCamera] = useState(false);
     const navigate = useNavigate();
@@ -197,11 +198,10 @@ const Upload = () => {
             }
         }
 
-        if (!fetched) {
+        if (!fetched && user) {
             toast.warning("Dữ liệu dán không phải là hình ảnh!", { ...constants.toastSettings });
         }
     };
-
 
     const handleSelectFile = async (e) => {
         const { files } = e.target;
@@ -231,6 +231,10 @@ const Upload = () => {
                 .uploadMedia(file, caption, showToastPleaseWait)
                 .then((res) => {
                     if (res) {
+                        setUploadSuccess(true);
+                        setTimeout(() => {
+                            setUploadSuccess(false);
+                        }, 2500);
                         setPreviewUrl("");
                         setCaption("");
                         setIsUploading(false);
@@ -295,7 +299,7 @@ const Upload = () => {
                                 {enable_cropping? "✅" : "❌"}
                             </button>
                             <span className={`${styles.warn_text}`}>
-                                {previewUrl? "Khóa vì đã đưa media lên rồi" : `${enable_cropping ? "⚠️ Đang bật crop video" : `${cropImage ? "Đang bật nén ảnh, không khả dụng" : ""}`}`}
+                                {previewUrl? "" : `${enable_cropping ? "⚠️ Đang bật crop video" : `${cropImage ? "⚠️ không khả dụng" : ""}`}`}
                             </span>
                         </div>
                         <div className={cx("croptitle")} >🛠️ Nén ảnh (Đang thử nghiệm)</div>
@@ -304,16 +308,16 @@ const Upload = () => {
                                 {cropImage? "✅" : "❌"}
                             </button>
                             <span className={`${styles.warn_text}`}>
-                                {previewUrl? "Khóa vì đã đưa media lên rồi" : `${cropImage ? "⚠️ Đang bật nén ảnh" : `${enable_cropping ? "Đang bật crop video, không khả dụng" : ""}`}`}
+                                {previewUrl? "" : `${cropImage ? "⚠️ Đang bật nén ảnh" : `${enable_cropping ? "⚠️ Không khả dụng" : ""}`}`}
                             </span>
                         </div>
                         </div>
-                        <div className={cx("toggle-camera")}>
-                        <div className={cx("use-camera-title")}>📷 Sử dụng Camera</div>
-                            <button className={cx("toggle-camera-btn")} onClick={toggleUseCamera}>
-                                <Camera size={30}/>
-                            </button>
-                        </div>
+                            {!cropImage && !enable_cropping && !previewUrl ? (<div className={cx("toggle-camera")}>
+                                <div className={cx("use-camera-title")}>📷 Sử dụng Camera</div>
+                                <button className={cx("toggle-camera-btn")} onClick={toggleUseCamera}>
+                                    <Camera size={30} />
+                                </button>
+                            </div>) : ""}
                         </div>
                         <div
                             className={cx("upload-area")}
@@ -383,22 +387,13 @@ const Upload = () => {
                             <Help />
                             <div className={cx("buttons")}>
                                 <button
-                                    disabled={
-                                        previewUrl && !isUploading
-                                            ? ""
-                                            : "disable"
-                                    }
-                                    className={cx("btn-submit", {
-                                        "is-loading": isUploading,
-                                    })}
+                                    disabled={previewUrl && !isUploading && !uploadSuccess ? "" : "disable"}
+                                    className={cx("btn-submit", {"is-loading": isUploading})}
                                     onClick={handleUploadFile}
-                                >
-                                    <span>Submit</span>
+                                    >
+                                    <span>{!uploadSuccess? "Submit": "✅"}</span>
                                     {isUploading && (
-                                        <img
-                                            src={images.spinner}
-                                            alt="spinner"
-                                            className={cx("spinner")}
+                                        <img src={images.spinner} alt="spinner" className={cx("spinner")}
                                         />
                                     )}
                                 </button>

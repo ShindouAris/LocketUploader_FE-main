@@ -205,6 +205,11 @@ const CameraView = () => {
     };
 
     const back_to_upload = () => {
+        if (stream) {
+            stopCamera();
+        }
+        setCapturedImage(null);
+        setCaption("");
         navigate("/");
     }
 
