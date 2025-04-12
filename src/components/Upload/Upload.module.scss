@@ -101,7 +101,34 @@ input[type="file"] {
         font-weight: inherit;
     }
 }
-.option-container {
+
+.tool-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+//.option-container {
+//    display: inline;
+//    border: 1px  #ccc;
+//    border-radius: 8px;
+//    background-color: #F6F7C4;
+//    padding: 8px;
+//    padding-bottom: 3px;
+//    width: max-content;
+//    min-width: fit-content;
+//    margin-bottom: 3px;
+//    transition: all 0.3s ease-in-out;
+//}
+
+.use-camera-title {
+    font-weight: bold;
+    font-size: 14px;
+    color: #1b1b1b;
+}
+
+.option-container,
+.toggle-camera {
     display: inline-block;
     border: 1px  #ccc;
     border-radius: 8px;
@@ -112,6 +139,18 @@ input[type="file"] {
     min-width: fit-content;
     margin-bottom: 3px;
     transition: all 0.3s ease-in-out;
+}
+.toggle-camera-btn {
+    width: 140px;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    padding: 12px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    background-color: #FFCDFF;
 }
 
 .upload-area {

@@ -12,6 +12,7 @@ import * as lockerService from "~/services/locketService";
 import Help from "../Modals/Login/Help";
 import VideoCroppingutils from "~/utils/videoUtils";
 import CompressorImage from "~/utils/imageUtils";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -71,6 +72,8 @@ const Upload = () => {
     const [isShowModal, setIsShowModal] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const fileRef = useRef(null);
+    // const [isUseCamera, setIsUseCamera] = useState(false);
+    const navigate = useNavigate();
 
     const [enable_cropping, setIsEnableCropping] = useState(false);
     const [cropImage, setCropImage] = useState(false);
@@ -215,6 +218,10 @@ const Upload = () => {
         await fileHandler(files)
     };
 
+    const toggleUseCamera = () => {
+        navigate("/camera")
+    }
+
     const handleUploadFile = () => {
         const fileType = file.type.includes("image") ? "ảnh" : "video";
         if (file) {
@@ -279,6 +286,7 @@ const Upload = () => {
                                 onChange={(e) => setCaption(e.target.value)}
                             />
                         </div>
+                        <div className={cx("tool-box")}>
                         <div className={cx("option-container")}>
                         <div className={cx("croptitle")} >🛠️ CropVideo (Đang thử nghiệm)</div>
                         <div className={cx("enable_cropping_video_btn")} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -297,6 +305,13 @@ const Upload = () => {
                             <span className={`${styles.warn_text}`}>
                                 {previewUrl? "Khóa vì đã đưa media lên rồi" : `${cropImage ? "⚠️ Đang bật nén ảnh" : `${enable_cropping ? "Đang bật crop video, không khả dụng" : ""}`}`}
                             </span>
+                        </div>
+                        </div>
+                        <div className={cx("toggle-camera")}>
+                        <div className={cx("use-camera-title")}>📷 Sử dụng máy ảnh  </div>
+                            <button className={cx("toggle-camera-btn")} onClick={toggleUseCamera}>
+                                Sử dụng camera của bạn
+                            </button>
                         </div>
                         </div>
                         <div
