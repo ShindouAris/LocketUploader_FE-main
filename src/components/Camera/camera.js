@@ -117,6 +117,7 @@ const CameraView = () => {
 
     const retakePhoto = async () => {
         setCapturedImage(null);
+        setCaption("")
         await startCamera();
     };
 
