@@ -310,7 +310,7 @@ const Upload = () => {
                         <div className={cx("toggle-camera")}>
                         <div className={cx("use-camera-title")}>📷 Sử dụng máy ảnh  </div>
                             <button className={cx("toggle-camera-btn")} onClick={toggleUseCamera}>
-                                Sử dụng camera của bạn
+                                Sử dụng camera
                             </button>
                         </div>
                         </div>
