@@ -41,7 +41,7 @@ const CameraView = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    const startCamera = async () => {
+    const startCamera = async (mode = facingMode) => {
         try {
             if (stream) {
                 stopCamera();
@@ -49,7 +49,7 @@ const CameraView = () => {
 
             const constraints = {
                 video: {
-                    facingMode: facingMode,
+                    facingMode: mode,
                     width: { ideal: 1920 },
                     height: { ideal: 1080 }
                 }
@@ -97,7 +97,7 @@ const CameraView = () => {
         const newFacingMode = facingMode === 'user' ? 'environment' : 'user';
         setFacingMode(newFacingMode);
         stopCamera();
-        await startCamera();
+        await startCamera(newFacingMode);
     };
 
     const capturePhoto = () => {
