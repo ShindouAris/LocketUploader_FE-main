@@ -293,7 +293,7 @@ const CameraView = () => {
                                 </div>
                             </div>
                         )}
-                        <button className={cx("backtoupload")} onClick={back_to_upload}>
+                        <button className={cx("backtoupload")} disabled={IsUploading} onClick={back_to_upload}>
                                 <FolderOpen size={30} />
                         </button>
                     </div>
