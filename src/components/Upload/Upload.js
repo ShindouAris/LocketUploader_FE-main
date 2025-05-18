@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import styles from "./Upload.module.scss";
 import classNames from "classnames/bind";
 import { toast } from "react-toastify";
-import { Camera } from "lucide-react";
+import { Camera, Info, PowerOff } from "lucide-react";
 
 import { AuthContext } from "~/contexts/AuthContext";
 import constants from "~/services/constants";
@@ -416,6 +416,15 @@ const Upload = () => {
                             onPleaseWait={showToastPleaseWait}
                         />
                         <img className={cx("pls_login_image")} src={images.pls_login} alt="pls_login_img" />
+                        <div className={cx("infomation-card")}>
+                        <h4 className={cx("infomation-text")}>
+                            <Info size={15} /> Thông báo
+                        </h4>
+                            <span className={cx("shutdown_web_message")}>
+                                <PowerOff size={14} /> Web sẽ đóng cửa sau khi locket gold trên android được cập nhật <br/>
+                                 Cảm ơn các bạn đã sử dụng các dịch vụ của Kanaket 💛
+                            </span>
+                        </div>
                     </div>
                 )}
             </div>

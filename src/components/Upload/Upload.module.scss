@@ -243,7 +243,6 @@ input[type="file"] {
 
     .spinner {
         position: absolute;
-        width: 25px;
         margin-left: 5px;
     }
 
@@ -252,34 +251,74 @@ input[type="file"] {
     }
 }
 
-// No login
 .no-login {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 20px;
-    height: 50%;
-
-    .btn-login {
-        font-size: 1.5rem;
-        padding: 10px 20px;
-        border-radius: 5px;
-        background-color: #F6F7C4;
-        color: #7BD3EA;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .btn-login:hover {
-        opacity: 0.8;
-    }
-    .pls_login_image {
-        height: 190px;
-        width: 150px;
-    }
+    gap: 25px; /* Tăng khoảng cách một chút */
+    padding: 30px 20px; /* Thêm padding cho container */
+    /* min-height: 50vh; Cân nhắc dùng min-height thay vì height */
+    /* Hoặc bỏ height đi và để nội dung quyết định */
+    text-align: center; /* Căn giữa text nếu cần */
 }
 
+.no-login h3 {
+    font-size: 1.8rem; /* Có thể tăng kích thước chữ một chút */
+    color: #333; /* Màu chữ đậm hơn cho dễ đọc */
+    margin-bottom: 10px; /* Khoảng cách với nút */
+}
+
+.no-login .btn-login {
+    font-size: 1.6rem; /* Giữ hoặc điều chỉnh kích thước chữ */
+    padding: 12px 25px; /* Tăng padding cho nút to hơn */
+    border-radius: 8px; /* Bo tròn nhiều hơn một chút */
+    background-color: #007bff; /* Màu xanh dương hiện đại, hoặc màu chủ đạo của bạn */
+    color: #ffffff; /* Chữ trắng nổi bật trên nền xanh */
+    font-weight: 600;
+    cursor: pointer;
+    border: none; /* Bỏ border mặc định nếu có */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out; /* Hiệu ứng mượt */
+}
+
+.no-login .btn-login:hover {
+    background-color: #0056b3; /* Màu đậm hơn khi hover */
+    transform: translateY(-2px); /* Nút nhích lên một chút khi hover */
+}
+
+.no-login .pls_login_image {
+    height: 180px; /* Giảm nhẹ nếu cần */
+    width: auto; /* Để giữ tỷ lệ ảnh */
+    max-width: 150px; /* Giới hạn chiều rộng tối đa */
+    border-radius: 8px; /* Bo tròn góc ảnh */
+    object-fit: cover; /* Đảm bảo ảnh fill đẹp */
+}
+
+.no-login .infomation-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #856404;
+    margin-bottom: 10px;
+}
+
+.no-login .infomation-card {
+    background-color: #fff3cd; /* Màu vàng nhạt cho thông báo (giống Bootstrap warning) */
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    padding: 20px; /* Tăng padding bên trong card */
+    width: 80%; /* Hoặc một giá trị % phù hợp, hoặc max-width */
+    max-width: 400px; /* Giới hạn chiều rộng tối đa của card */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    text-align: left; /* Căn chữ trái trong card cho dễ đọc */
+}
+
+.no-login .shutdown_web_message {
+    color: #856404; /* Màu chữ đậm hơn cho nền vàng */
+    font-size: 1rem; /* Kích thước chữ vừa phải */
+    line-height: 1.6; /* Tăng chiều cao dòng cho dễ đọc */
+    margin: 0; /* Bỏ margin mặc định của span nếu có */
+}
 // Responsive
 
 @media screen and (max-width: 767px) {
