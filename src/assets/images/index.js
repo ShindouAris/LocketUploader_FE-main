@@ -5,7 +5,7 @@ const images = {
     eye: require("./eye.png"),
     noEye: require("./eye-slash.png"),
     logout_alt: require("./kanade_image.jpg"),
-    pls_login: require("./pls_login.jpg"),
+    pls_login: require("./pls_login.png"),
     internalError: require("./500 InternalServerError.png"),
     notfound: require("./404 NotFound.png")
 };

@@ -2,18 +2,16 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import styles from "./Upload.module.scss";
 import classNames from "classnames/bind";
 import { toast } from "react-toastify";
-import { Camera, Info, PowerOff } from "lucide-react";
+import { Camera } from "lucide-react";
 
 import { AuthContext } from "~/contexts/AuthContext";
 import constants from "~/services/constants";
 import images from "~/assets/images";
-import LoginModal from "../Modals/Login/LoginModal";
-import * as miscFuncs from "~/helper/misc-functions";
 import * as lockerService from "~/services/locketService";
 import Help from "../Modals/Login/Help";
 import VideoCroppingutils from "~/utils/videoUtils";
 import CompressorImage from "~/utils/imageUtils";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -65,16 +63,14 @@ const autoCropImage = async (imageFile) => {
 
 
 const Upload = () => {
-    const { user, setUser } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     const [file, setFile] = useState(null);
     const [caption, setCaption] = useState("");
     const [previewUrl, setPreviewUrl] = useState("");
-    const [isShowModal, setIsShowModal] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const fileRef = useRef(null);
-    // const [isUseCamera, setIsUseCamera] = useState(false);
     const navigate = useNavigate();
 
     const [enable_cropping, setIsEnableCropping] = useState(false);
@@ -87,18 +83,6 @@ const Upload = () => {
             }
         };
     }, [previewUrl]);
-
-    const handleAfterLogin = (userInfo) => {
-        setIsShowModal(false);
-        setUser(userInfo.user);
-
-        toast.dismiss();
-        toast.success("Đăng nhập thành công", {
-            ...constants.toastSettings,
-        });
-        // Lưu vào cookie
-        miscFuncs.setCookie("user", JSON.stringify(userInfo.user), 1);
-    };
 
     const handleTriggerUploadFile = () => {
         fileRef.current.click();
@@ -401,31 +385,7 @@ const Upload = () => {
                         </div>
                     </>
                 ) : (
-                    <div className={cx("no-login")}>
-                        <h3>Vui lòng đăng nhập để tiếp tục</h3>
-                        <button
-                            className={cx("btn-login")}
-                            onClick={() => setIsShowModal(true)}
-                        >
-                            Đăng nhập
-                        </button>
-                        <LoginModal
-                            handleAfterLogin={handleAfterLogin}
-                            show={isShowModal}
-                            onHide={() => setIsShowModal(false)}
-                            onPleaseWait={showToastPleaseWait}
-                        />
-                        <img className={cx("pls_login_image")} src={images.pls_login} alt="pls_login_img" />
-                        <div className={cx("infomation-card")}>
-                        <h4 className={cx("infomation-text")}>
-                            <Info size={15} /> Thông báo
-                        </h4>
-                            <span className={cx("shutdown_web_message")}>
-                                <PowerOff size={14} /> Web sẽ đóng cửa sau khi locket gold trên android được cập nhật <br/>
-                                 Cảm ơn các bạn đã sử dụng các dịch vụ của Kanaket 💛
-                            </span>
-                        </div>
-                    </div>
+                    <Navigate to={"/login"} replace={true} />
                 )}
             </div>
         </div>
